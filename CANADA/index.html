@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Discover Canada</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        /* Full-page hero section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            color: #fff;
+            overflow: hidden;
+            transition: background-image 0.8s ease-in-out;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        /* Navbar on the top left */
+        .navbar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.2rem;
+            color: white;
+            z-index: 2;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .hero-content {
+            position: absolute;
+            bottom: 100px; /* Move the text slightly higher */
+            left: 20px;
+            z-index: 1;
+            max-width: 300px;
+            text-align: left;
+            color: black;
+        }
+        .hero-content h1 {
+            font-size: 2rem;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: #fff;
+        }
+        .hero-content p {
+            font-size: 0.9rem;
+            margin: 10px 0;
+            color: rgb(255, 249, 249);
+        }
+        .btn-learn-more {
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            color: #fff;
+            background-color: #2196f3;
+            border: none;
+            cursor: pointer;
+        }
+        /* Thumbnail section */
+        .thumbnail-container {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+        .thumbnail-list {
+            display: flex;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+        .thumbnail {
+            width: 150px;
+            height: 90px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .thumbnail:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .thumbnail-overlay {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .thumbnail:hover .thumbnail-overlay {
+            opacity: 1;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .arrow-left {
+            left: 10px;
+        }
+
+        .arrow-right {
+            right: 10px;
+        }
+
+        /* Mobile view: Display arrows and batch 1 & 2 */
+        @media (max-width: 600px) {
+            .thumbnail {
+                width: 100px;
+                height: 60px;
+            }
+
+            .arrow {
+                display: block;
+            }
+
+            .thumbnail-container {
+                justify-content: flex-start; /* Ensure thumbnails fit in container */
+            }
+        }
+
+        /* Desktop view: Show all thumbnails and hide arrows */
+        @media (min-width: 601px) {
+            .thumbnail-container {
+                justify-content: center;
+            }
+
+            .arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="javascript:void(0);" onclick="changeToCanada()">Canada</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero" style="background-image: url(https://imgur.com/aSdjePM.jpg);">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1 id="hero-title">Discover Canada</h1>
+            <p id="hero-description">Explore Canada's top destinations and immerse yourself in its diverse landscapes.</p>
+            <button class="btn-learn-more">Learn More</button>
+        </div>
+    </section>
+
+    <!-- Thumbnail Links Section -->
+    <div class="thumbnail-container">
+        <div id="thumbnail-list" class="thumbnail-list">
+            <!-- Batch 1 and 2 thumbnails go here -->
+        </div>
+
+        <!-- Arrows -->
+        <span class="arrow arrow-left" onclick="moveLeft()">&#60;</span>
+        <span class="arrow arrow-right" onclick="moveRight()">&#62;</span>
+    </div>
+
+    <script>
+        // Flag to track the current state (whether it's "Discover Canada" or "Explore Canada")
+        let isDiscoverCanada = true;
+
+        // Function to change the hero section to show Canada details or go back to "Discover Canada"
+        function changeToCanada() {
+            const heroSection = document.getElementById('hero');
+            const heroTitle = document.getElementById('hero-title');
+            const heroDescription = document.getElementById('hero-description');
+
+            if (isDiscoverCanada) {
+                // Switch to "Explore Canada"
+                const canadaContent = {
+                    title: "Explore Canada",
+                    description: "Canada offers a diverse range of natural beauty, from stunning national parks to vibrant cities.",
+                    imageUrl: "https://example.com/canada-image.jpg" // Replace with actual Canada image URL
+                };
+                heroTitle.innerText = canadaContent.title;
+                heroDescription.innerText = canadaContent.description;
+                heroSection.style.backgroundImage = `url(${canadaContent.imageUrl})`;
+            } else {
+                // Switch back to "Discover Canada"
+                const discoverContent = {
+                    title: "Discover Canada",
+                    description: "Explore Canada's top destinations and immerse yourself in its diverse landscapes.",
+                    imageUrl: "https://imgur.com/aSdjePM.jpg" // Replace with the default Discover Canada image URL
+                };
+                heroTitle.innerText = discoverContent.title;
+                heroDescription.innerText = discoverContent.description;
+                heroSection.style.backgroundImage = `url(${discoverContent.imageUrl})`;
+            }
+
+            // Toggle the flag
+            isDiscoverCanada = !isDiscoverCanada;
+        }
+
+        let currentBatch = 1; // We start with Batch 1
+        const thumbnailList = document.getElementById('thumbnail-list');
+        
+        // Locations for batch 1
+        const batch1 = [
+            { name: "Toronto", imgSrc: "https://imgur.com/g9Z8TKY.jpg", description: "The largest city in Canada." },
+            { name: "Banff", imgSrc: "https://imgur.com/YNFnsVK.jpg", description: "A beautiful national park in the Canadian Rockies." },
+            { name: "Old Quebec", imgSrc: "https://imgur.com/WEarsoG.jpg", description: "A historic area in Quebec City." },
+            { name: "Niagara Falls", imgSrc: "https://imgur.com/ezEeteV.jpg", description: "Famous waterfalls on the border of Ontario and New York." }
+        ];
+
+        // Locations for batch 2
+        const batch2 = [
+            { name: "Vancouver", imgSrc: "https://imgur.com/BtFuUut.jpg", description: "A coastal seaport city in British Columbia." },
+            { name: "Prince Edward Island", imgSrc: "https://imgur.com/IgzNt0K.jpg", description: "An island province in eastern Canada." },
+            { name: "Ottawa", imgSrc: "https://imgur.com/dAwV3Y6.jpg", description: "The capital city of Canada." },
+            { name: "Montreal", imgSrc: "https://imgur.com/ipeh2x5.jpg", description: "A major city in the Canadian province of Quebec." }
+        ];
+
+        // Function to change the location
+        function changeLocation(location) {
+            const heroSection = document.getElementById('hero');
+            const heroTitle = document.getElementById('hero-title');
+            const heroDescription = document.getElementById('hero-description');
+
+            let selectedLocation = batch1.find(place => place.name === location) || batch2.find(place => place.name === location);
+            if (selectedLocation) {
+                heroTitle.innerText = selectedLocation.name;
+                heroDescription.innerText = selectedLocation.description;
+                heroSection.style.backgroundImage = `url(${selectedLocation.imgSrc.replace('thumbnail', 'background')})`;
+            }
+        }
+
+        // Function to move to the next batch (toggle between Batch 1 and Batch 2)
+        function moveLeft() {
+            if (currentBatch === 2) {
+                currentBatch = 1;
+                renderThumbnails(batch1);
+            } else {
+                currentBatch = 2;
+                renderThumbnails(batch2);
+            }
+        }
+
+        function moveRight() {
+            if (currentBatch === 1) {
+                currentBatch = 2;
+                renderThumbnails(batch2);
+            } else {
+                currentBatch = 1;
+                renderThumbnails(batch1);
+            }
+        }
+
+        // Render the appropriate batch of places
+        function renderThumbnails(batch) {
+            const thumbnailContainer = document.getElementById('thumbnail-list');
+            thumbnailContainer.innerHTML = "";
+            batch.forEach(place => {
+                const div = document.createElement('div');
+                div.className = "thumbnail";
+                div.onclick = () => changeLocation(place.name);
+                div.innerHTML = `
+                    <img src="${place.imgSrc}" alt="${place.name}">
+                    <div class="thumbnail-overlay">${place.name}</div>
+                `;
+                thumbnailContainer.appendChild(div);
+            });
+        }
+
+        // Function to check the screen width and decide the thumbnail rendering
+        function checkScreenSize() {
+            if (window.innerWidth >= 601) {
+                // Laptop/desktop view - show all thumbnails (batch 1 + batch 2)
+                renderThumbnails([...batch1, ...batch2]);
+            } else {
+                // Mobile view - only show batch 1 and batch 2
+                renderThumbnails(batch1);
+            }
+        }
+
+        // Call the function to check screen size on load and resize
+        window.onload = checkScreenSize;
+        window.onresize = checkScreenSize;
+    </script>
+</body>
+</html>
