@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General styling with transitions */
+        body {
+            background: url('https://imgur.com/Yh7i0NC.jpg') center / cover no-repeat;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+        agent-details h1 {
+            color: #ff4655; /* Red agent name */
+            font-weight: bold;
+        }
+        /* Image hover effect */
+        .agent-image {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .agent-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Card styling for agent details */
+        .agent-details {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Ability list styling */
+        .abilities-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .abilities-list li {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .abilities-list li:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Back button */
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #666;
+            border-color: #777;
+        }
+
+        /* Light mode styles */
+        body.light-mode {
+            background: url('https://imgur.com/2de7I3O.jpg') center / cover no-repeat; /* Replace with light mode image */
+            color: #000;
+        }
+
+        body.light-mode .agent-details {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #000;
+        }
+
+        body.light-mode .abilities-list li {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .abilities-list li:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animated Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s, color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-mode .theme-toggle {
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-4">
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" id="theme-toggle">Switch to Light Mode</button>
+
+        <!-- Back button -->
+        <a href="index.html" class="btn btn-secondary mb-4">← Back to All Agents</a>
+
+        <!-- Agent details section -->
+        <div class="row">
+            <!-- Left column: Agent image -->
+            <div class="col-md-6 text-center">
+                <img id="agent-image" class="agent-image" alt="Agent Image" loading="lazy">
+            </div>
+            <!-- Right column: Agent details -->
+            <div class="col-md-6">
+                <div class="agent-details">
+                    <h1 id="agent-name" class="mb-3">Loading...</h1>
+                    <p><strong>Description:</strong> <span id="agent-description">N/A</span></p>
+                    <p><strong>Role:</strong> <span id="agent-role">N/A</span></p>
+                    <p><strong>Abilities:</strong></p>
+                    <ul id="abilities-list" class="abilities-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch agent ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const agentId = urlParams.get('id');
+        const apiUrl = `https://valorant-api.com/v1/agents/${agentId}`;
+
+        // Fetch and display agent details
+        async function fetchAgentDetails() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('Failed to fetch agent details.');
+
+                const data = await response.json();
+                const agent = data.data;
+
+                // Update DOM with agent details
+                document.getElementById('agent-image').src = agent.fullPortrait || 'default-image.jpg';
+                document.getElementById('agent-name').innerText = agent.displayName || 'Unknown Agent';
+                document.getElementById('agent-description').innerText = agent.description || 'No description available.';
+                document.getElementById('agent-role').innerText = agent.role ? agent.role.displayName : 'No role assigned.';
+
+                // Populate abilities
+                const abilitiesList = document.getElementById('abilities-list');
+                abilitiesList.innerHTML = agent.abilities.map(ability => `
+                    <li><strong>${ability.displayName}:</strong> ${ability.description || 'No description available.'}</li>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                document.body.innerHTML = '<div class="text-center mt-5"><h2>Unable to load agent details.</h2><p>Please try again later.</p></div>';
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+            }
+        });
+
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const isLightMode = document.body.classList.contains('light-mode');
+            themeToggle.textContent = isLightMode ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+        });
+
+        fetchAgentDetails();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
