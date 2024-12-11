@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Spaceship Page</title>
+  
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0px;
+      background: linear-gradient(90deg, rgba(47,54,64,1) 23%, rgba(24,27,32,1) 100%);
+    }
+
+    .moon {
+      background: linear-gradient(90deg, rgb(192, 192, 192) 48%, rgba(145,145,145,1) 100%);
+      position: absolute;
+      top: -100px;
+      left: -300px;
+      width: 900px;
+      height: 900px;
+      border-radius: 100%;
+      box-shadow: 0px 0px 30px -4px rgba(0,0,0,0.5);
+    }
+
+    .moon__crater {
+      position: absolute;
+      border-radius: 100%;
+      background: linear-gradient(90deg, rgba(122,122,122,1) 38%, rgba(195,195,195,1) 100%);
+      opacity: 0.6;
+    }
+
+    .moon__crater1 { top: 250px; left: 500px; width: 60px; height: 180px; }
+    .moon__crater2 { top: 650px; left: 340px; width: 40px; height: 80px; transform: rotate(55deg); }
+    .moon__crater3 { top: -20px; left: 40px; width: 65px; height: 120px; transform: rotate(250deg); }
+
+    .star {
+      background: grey;
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 100%;
+      opacity: 0.4;
+      animation-name: shimmer;
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }
+
+    @keyframes shimmer {
+      from { opacity: 0; }
+      to { opacity: 0.7; }
+    }
+
+    .star1 { top: 40%; left: 50%; animation-delay: 1s; }
+    .star2 { top: 60%; left: 90%; animation-delay: 3s; }
+    .star3 { top: 10%; left: 70%; animation-delay: 2s; }
+    .star4 { top: 90%; left: 40%; }
+    .star5 { top: 20%; left: 30%; animation-delay: 0.5s; }
+
+    .error {
+      position: absolute;
+      left: 100px;
+      top: 400px;
+      transform: translateY(-60%);
+      font-family: 'Righteous', cursive;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .error__title { font-size: 10em; }
+    .error__subtitle { font-size: 2em; }
+    .error__description { font-size: 2em; }
+
+    .spaceship {
+      position: absolute;
+      width: 150px;
+      height: 300px;
+      left: 70%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+
+    .spaceship__body {
+      background: linear-gradient(180deg, #bfbfbf 20%, #ffffff 80%);
+      position: absolute;
+      width: 70px;
+      height: 200px;
+      left: 40px;
+      top: 50px;
+      border-radius: 35px;
+      border: 2px solid #8f8f8f;
+    }
+
+    .spaceship__window {
+      background-color: #00bfff;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 70px;
+      left: 55px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .spaceship__fin {
+      background-color: #d32f2f;
+      position: absolute;
+      width: 50px;
+      height: 60px;
+      top: 150px;
+      left: 10px;
+      transform: skew(-20deg);
+    }
+
+    .spaceship__fin--right {
+      left: auto;
+      right: 10px;
+      transform: skew(20deg);
+    }
+
+    .spaceship__flame {
+      position: absolute;
+      background: radial-gradient(circle, rgba(255,94,0,1) 0%, rgba(255,165,0,1) 50%, rgba(255,223,0,0.5) 100%);
+      width: 40px;
+      height: 80px;
+      top: 250px;
+      left: 55px;
+      border-radius: 20px;
+      animation: flicker 0.3s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.8; transform: scaleY(0.9); }
+      100% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    @media (max-width: 768px) {
+      .moon {
+        width: 480px;
+        height: 480px;
+        top: -150px;
+        left: 11px;
+      }
+      .moon__crater1 {
+        top: 180px;
+        left: 200px;
+        transform: rotate(90deg);
+      }
+      .moon__crater2 {
+        top: 120px;
+        left: 30px;
+        transform: rotate(-30deg);
+        height: 80px
+      }
+      .moon__crater3 {
+        top: 15px;
+        left: 415px;
+        transform: rotate(-20deg);
+        height: 100px
+      }
+      .error__title {
+        font-size: 5em;
+      }
+
+      .error__subtitle,
+      .error__description {
+        font-size: 1.5em;
+      }
+
+      .spaceship {
+        width: 120px;
+        height: 240px;
+        left: 50%;
+        top: 85%;
+      }
+
+      .spaceship__body {
+        width: 60px;
+        height: 160px;
+        transform: rotate(90deg);
+      }
+
+      .spaceship__window {
+        width: 30px;
+        height: 30px;
+        top: 115px;
+        left: 110px;
+      }
+      .spaceship__fin--right {
+        top: 60px;
+        left: 50px
+    }
+
+      .spaceship__fin {
+        width: 40px;
+        height: 60px;
+        top: 70px;
+        left: 40px;
+        transform: rotate(135deg);
+      }
+    
+
+      .spaceship__flame {
+        width: 30px;
+        height: 60px;
+        top: 100px;
+        left: -30px;
+        
+      }
+
+      .error {
+        position: absolute;
+        top: 14%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 0.9em;
+        color: #ffffff;
+        z-index: 1;
+      }
+
+      .error__title {
+        font-size: 5em;
+      }
+
+      .error__subtitle,
+      .error__description {
+        font-size: 1.2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="moon"></div>
+  <div class="moon__crater moon__crater1"></div>
+  <div class="moon__crater moon__crater2"></div>
+  <div class="moon__crater moon__crater3"></div>
+
+  
+  <div class="star star1"></div>
+  <div class="star star2"></div>
+  <div class="star star3"></div>
+  <div class="star star4"></div>
+  <div class="star star5"></div>
+
+  <div class="error">
+    <div class="error__title">404</div>
+    <div class="error__subtitle">LOOKS LIKE YOU ARE</div>
+    <div class="error__description">LOST IN SPACE</div>
+    <div class="mt-4">
+      <a href="" class="btn btn-outline-secondary">Home</a>
+    </div>
+  </div>
+
+ 
+  <div class="spaceship">
+    <div class="spaceship__body"></div>
+    <div class="spaceship__window"></div>
+    <div class="spaceship__fin"></div>
+    <div class="spaceship__fin spaceship__fin--right"></div>
+    <div class="spaceship__flame"></div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
